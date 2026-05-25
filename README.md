@@ -40,6 +40,26 @@ GPU: NVIDIA GeForce RTX 3080
 
 ## Build
 
+### CMake (Recommended)
+
+Requires CMake 3.20+ and Visual Studio 2022.
+
+```cmd
+cmake -B build -G "Visual Studio 17 2022" -A x64
+cmake --build build --config Release
+```
+
+Binaries will be output to `build/Release/`:
+- `vram_dx9.exe`
+- `vram_dx11.exe`
+- `vram_dx12.exe`
+
+To build a single target:
+
+```cmd
+cmake --build build --config Release --target vram_dx11
+```
+
 ### Command Line (MSVC Developer Prompt)
 
 ```cmd
