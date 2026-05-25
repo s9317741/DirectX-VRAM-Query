@@ -4,21 +4,21 @@ project(DirectX-VRAM-Query CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-if(NOT WIN32)
-    message(FATAL_ERROR "DirectX targets require Windows. Only Vulkan and OpenCL targets are cross-platform.")
+if(WIN32)
+    # DirectX 9
+    add_executable(vram_dx9 main.cpp)
+    target_link_libraries(vram_dx9 PRIVATE d3d9)
+
+    # DirectX 11
+    add_executable(vram_dx11 main_dx11.cpp)
+    target_link_libraries(vram_dx11 PRIVATE d3d11 dxgi)
+
+    # DirectX 12
+    add_executable(vram_dx12 main_dx12.cpp)
+    target_link_libraries(vram_dx12 PRIVATE d3d12 dxgi)
+else()
+    message(STATUS "Non-Windows platform: skipping DirectX targets")
 endif()
-
-# DirectX 9
-add_executable(vram_dx9 main.cpp)
-target_link_libraries(vram_dx9 PRIVATE d3d9)
-
-# DirectX 11
-add_executable(vram_dx11 main_dx11.cpp)
-target_link_libraries(vram_dx11 PRIVATE d3d11 dxgi)
-
-# DirectX 12
-add_executable(vram_dx12 main_dx12.cpp)
-target_link_libraries(vram_dx12 PRIVATE d3d12 dxgi)
 
 # Vulkan (requires Vulkan SDK: https://vulkan.lunarg.com/)
 find_package(Vulkan QUIET)

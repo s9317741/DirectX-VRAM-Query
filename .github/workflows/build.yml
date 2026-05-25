@@ -14,19 +14,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: microsoft/setup-msbuild@v2
+      - uses: ilammy/msvc-dev-cmd@v1
 
       - name: Configure CMake
-        run: cmake -B build -G "Visual Studio 17 2022" -A x64
+        run: cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
 
       - name: Build DX9
-        run: cmake --build build --config Release --target vram_dx9
+        run: cmake --build build --target vram_dx9
 
       - name: Build DX11
-        run: cmake --build build --config Release --target vram_dx11
+        run: cmake --build build --target vram_dx11
 
       - name: Build DX12
-        run: cmake --build build --config Release --target vram_dx12
+        run: cmake --build build --target vram_dx12
 
   build-vulkan:
     name: Vulkan
@@ -35,7 +35,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: microsoft/setup-msbuild@v2
+      - uses: ilammy/msvc-dev-cmd@v1
 
       - name: Install Vulkan SDK
         uses: jakoch/install-vulkan-sdk-action@v1.5.3
@@ -45,10 +45,10 @@ jobs:
           cache: true
 
       - name: Configure CMake
-        run: cmake -B build -G "Visual Studio 17 2022" -A x64
+        run: cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
 
       - name: Build Vulkan
-        run: cmake --build build --config Release --target vram_vulkan
+        run: cmake --build build --target vram_vulkan
 
   build-opencl:
     name: OpenCL
@@ -57,7 +57,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: microsoft/setup-msbuild@v2
+      - uses: ilammy/msvc-dev-cmd@v1
 
       - name: Install OpenCL SDK
         run: |
@@ -70,7 +70,7 @@ jobs:
           echo "CMAKE_PREFIX_PATH=$sdkDir" >> $env:GITHUB_ENV
 
       - name: Configure CMake
-        run: cmake -B build -G "Visual Studio 17 2022" -A x64 -DCMAKE_PREFIX_PATH="$env:CMAKE_PREFIX_PATH"
+        run: cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$env:CMAKE_PREFIX_PATH"
 
       - name: Build OpenCL
-        run: cmake --build build --config Release --target vram_opencl
+        run: cmake --build build --target vram_opencl
