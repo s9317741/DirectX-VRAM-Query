@@ -7,7 +7,8 @@ on:
     branches: [main]
 
 jobs:
-  build:
+  build-directx:
+    name: DirectX (DX9 / DX11 / DX12)
     runs-on: windows-latest
 
     steps:
@@ -24,3 +25,43 @@ jobs:
 
       - name: Build DX12
         run: cmake --build build --config Release --target vram_dx12
+
+  build-vulkan:
+    name: Vulkan
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Vulkan SDK
+        uses: humbletim/setup-vulkan-sdk@v1.2.0
+        with:
+          vulkan-query-version: latest
+          vulkan-components: Vulkan-Headers, Vulkan-Loader
+          vulkan-use-cache: true
+
+      - name: Configure CMake
+        run: cmake -B build -G "Visual Studio 17 2022" -A x64
+
+      - name: Build Vulkan
+        run: cmake --build build --config Release --target vram_vulkan
+
+  build-opencl:
+    name: OpenCL
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install OpenCL SDK
+        run: |
+          $url = "https://github.com/KhronosGroup/OpenCL-SDK/releases/latest/download/OpenCL-SDK-v2024.05.08-Win-x64.zip"
+          Invoke-WebRequest $url -OutFile opencl-sdk.zip
+          Expand-Archive opencl-sdk.zip -DestinationPath opencl-sdk
+          echo "CMAKE_PREFIX_PATH=$PWD/opencl-sdk" >> $env:GITHUB_ENV
+
+      - name: Configure CMake
+        run: cmake -B build -G "Visual Studio 17 2022" -A x64
+
+      - name: Build OpenCL
+        run: cmake --build build --config Release --target vram_opencl
