@@ -1,12 +1,17 @@
 #include <vulkan/vulkan.h>
 #include <stdio.h>
 #include <string.h>
+#ifdef _WIN32
+#include <windows.h>
+#else
+#include <unistd.h>
+#endif
 
 // Link: requires Vulkan SDK installed (https://vulkan.lunarg.com/)
 // MSVC: cl main_vulkan.cpp /I"%VULKAN_SDK%\Include" /link /LIBPATH:"%VULKAN_SDK%\Lib" vulkan-1.lib
 // CMake: target_link_libraries(vram_vulkan PRIVATE Vulkan::Vulkan)
 
-static void print_device(VkPhysicalDevice device, UINT index, bool json)
+static void print_device(VkPhysicalDevice device, uint32_t index, bool json)
 {
     VkPhysicalDeviceProperties props;
     vkGetPhysicalDeviceProperties(device, &props);
@@ -102,7 +107,11 @@ int main(int argc, char* argv[])
 
         delete[] devices;
 
+#ifdef _WIN32
         if (watch) Sleep(1000);
+#else
+        if (watch) sleep(1);
+#endif
     } while (watch);
 
     vkDestroyInstance(instance, NULL);

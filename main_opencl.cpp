@@ -1,6 +1,13 @@
+#define CL_TARGET_OPENCL_VERSION 300
 #include <CL/cl.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#ifdef _WIN32
+#include <windows.h>
+#else
+#include <unistd.h>
+#endif
 
 // Link: requires OpenCL SDK (included in CUDA Toolkit, Intel oneAPI, or AMD ROCm)
 // MSVC: cl main_opencl.cpp /I"%OPENCL_ROOT%\include" /link /LIBPATH:"%OPENCL_ROOT%\lib\x64" OpenCL.lib
@@ -107,7 +114,11 @@ int main(int argc, char* argv[])
         if (watch && !json) system("clear");
 #endif
         query_all(json);
+#ifdef _WIN32
         if (watch) Sleep(1000);
+#else
+        if (watch) sleep(1);
+#endif
     } while (watch);
 
     return 0;
