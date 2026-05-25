@@ -1,4 +1,4 @@
-# DirectX-Memory-Used
+# DirectX-VRAM-Query
 
 Windows utilities that query GPU video memory information using DirectX 9 / 11 / 12 APIs.
 
