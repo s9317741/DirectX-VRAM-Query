@@ -16,14 +16,6 @@ Contributions are welcome. Please follow the guidelines below.
 3. Make your changes
 4. Open a pull request against `main`
 
-## Code style
-
-- C++17, no external dependencies beyond the target API SDK
-- No Chinese (or other non-English) comments — English only
-- No `Co-Authored-By` lines in commit messages
-- Each backend lives in its own `main_<api>.cpp` file
-- Support `--json` and `--watch` flags for consistency with existing backends
-
 ## Adding a new backend
 
 1. Create `main_<api>.cpp`
