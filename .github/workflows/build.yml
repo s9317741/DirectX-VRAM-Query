@@ -14,6 +14,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: microsoft/setup-msbuild@v2
+
       - name: Configure CMake
         run: cmake -B build -G "Visual Studio 17 2022" -A x64
 
@@ -33,20 +35,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: microsoft/setup-msbuild@v2
+
       - name: Install Vulkan SDK
-        run: |
-          $tag = (Invoke-RestMethod "https://api.github.com/repos/KhronosGroup/Vulkan-Headers/releases/latest").tag_name
-          $version = $tag.TrimStart('v')
-          $url = "https://sdk.lunarg.com/sdk/download/$version/windows/VulkanSDK-$version-Installer.exe"
-          Write-Output "Downloading Vulkan SDK $version"
-          Invoke-WebRequest $url -OutFile VulkanSDK.exe
-          Start-Process VulkanSDK.exe -ArgumentList "--accept-licenses --default-answer --confirm-command install" -Wait
-          $sdkPath = "C:\VulkanSDK\$version"
-          echo "VULKAN_SDK=$sdkPath" >> $env:GITHUB_ENV
-          echo "$sdkPath\Bin" >> $env:GITHUB_PATH
+        uses: jakoch/install-vulkan-sdk-action@v1.5.3
+        with:
+          vulkan_version: 1.4.350.0
+          install_runtime: true
+          cache: true
 
       - name: Configure CMake
-        run: cmake -B build -G "Visual Studio 17 2022" -A x64 -DCMAKE_PREFIX_PATH="$env:VULKAN_SDK"
+        run: cmake -B build -G "Visual Studio 17 2022" -A x64
 
       - name: Build Vulkan
         run: cmake --build build --config Release --target vram_vulkan
@@ -57,6 +56,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      - uses: microsoft/setup-msbuild@v2
 
       - name: Install OpenCL SDK
         run: |
