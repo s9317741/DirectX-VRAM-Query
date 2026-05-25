@@ -118,7 +118,3 @@ vram_dx12.exe --json --watch | your-script.py
 - DX9's `GetAvailableTextureMem()` returns an estimated value; use DX11/DX12 for accurate results
 - `QueryVideoMemoryInfo()` reports the OS-managed budget, which may be lower than physical VRAM when other apps are running
 - Vulkan and OpenCL report heap capacity, not real-time usage (no equivalent of `QueryVideoMemoryInfo` in those APIs)
-
-## Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md).
